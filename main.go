@@ -26,16 +26,18 @@ func main() {
 
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("Please input IMDb id (e.g. tt0903747): ")
+imdbid:
+	fmt.Printf("Please input IMDb ID (e.g. tt0903747): ")
 	line, _ := reader.ReadString('\n')
 	line = strings.TrimSpace(line)
 	matched, _ := regexp.MatchString(`tt\d+`, line)
 	if !matched {
-		fmt.Printf("Invalid IMDb id: %s\n", line)
-		os.Exit(1)
+		fmt.Printf("Invalid IMDb ID: %s\n", line)
+		goto imdbid
 	}
 	imdbid := line
 
+season:
 	fmt.Printf("Please input season number (e.g. 02, defaults to 01): ")
 	line, _ = reader.ReadString('\n')
 	line = strings.TrimSpace(line)
@@ -45,7 +47,7 @@ func main() {
 	matched, _ = regexp.MatchString(`\d+`, line)
 	if !matched {
 		fmt.Printf("Invalid season number: %s\n", line)
-		os.Exit(1)
+		goto season
 	}
 	season := line
 
