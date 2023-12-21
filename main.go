@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/signal"
 	"path"
 	"regexp"
 	"strings"
@@ -23,6 +24,15 @@ func main() {
 		fmt.Printf("The .plexmatch file already exists:\n%s", string(content))
 		os.Exit(1)
 	}
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for sig := range c {
+			fmt.Printf("\nAborted with signal: %s\n", sig)
+			os.Exit(1)
+		}
+	}()
 
 	reader := bufio.NewReader(os.Stdin)
 
